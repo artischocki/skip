@@ -409,6 +409,24 @@ files = [
 ]
 
 [[package]]
+name = "efficientnet"
+version = "1.0.0"
+description = "EfficientNet model re-implementation. Keras and TensorFlow Keras."
+optional = false
+python-versions = ">=3.0.0"
+files = [
+    {file = "efficientnet-1.0.0-py3-none-any.whl", hash = "sha256:c6fd035d856c9f1c409f3ac19e7655e54a13851046c821e9d4417fd12bcbaae4"},
+    {file = "efficientnet-1.0.0.tar.gz", hash = "sha256:868715f6f5467186c0fa67ee8c9d50260b22f3a1bfb5919acd9911358be54df9"},
+]
+
+[package.dependencies]
+keras-applications = ">=1.0.7,<=1.0.8"
+scikit-image = "*"
+
+[package.extras]
+test = ["pytest"]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.3.0"
 description = "Backport of PEP 654 (exception groups)"
@@ -657,6 +675,23 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
+name = "image-classifiers"
+version = "1.0.0"
+description = "Image classification models. Keras."
+optional = false
+python-versions = ">=3.0.0"
+files = [
+    {file = "image_classifiers-1.0.0-py3-none-any.whl", hash = "sha256:6030bdfd1bc334a4e9d018e8962fbe9c8deba3257dc21c237032ff1590da2b98"},
+    {file = "image_classifiers-1.0.0.tar.gz", hash = "sha256:62022c0ff919d8ba5e3ffb7958b7db916e102e3e65c47c71cf8717ced43c0e4c"},
+]
+
+[package.dependencies]
+keras-applications = ">=1.0.7,<=1.0.8"
+
+[package.extras]
+tests = ["pytest", "scikit-image"]
+
+[[package]]
 name = "imageio"
 version = "2.37.0"
 description = "Library for reading and writing a wide range of image, video, scientific, and volumetric data formats."
@@ -852,6 +887,24 @@ numpy = "*"
 optree = "*"
 packaging = "*"
 rich = "*"
+
+[[package]]
+name = "keras-applications"
+version = "1.0.8"
+description = "Reference implementations of popular deep learning models"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Keras_Applications-1.0.8-py3-none-any.whl", hash = "sha256:df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95"},
+    {file = "Keras_Applications-1.0.8.tar.gz", hash = "sha256:5579f9a12bcde9748f4a12233925a59b93b73ae6947409ff34aa2ba258189fe5"},
+]
+
+[package.dependencies]
+h5py = "*"
+numpy = ">=1.9.1"
+
+[package.extras]
+tests = ["pytest", "pytest-cov", "pytest-pep8", "pytest-xdist"]
 
 [[package]]
 name = "kiwisolver"
@@ -2070,6 +2123,25 @@ doc = ["intersphinx_registry", "jupyterlite-pyodide-kernel", "jupyterlite-sphinx
 test = ["Cython", "array-api-strict (>=2.0,<2.1.1)", "asv", "gmpy2", "hypothesis (>=6.30)", "meson", "mpmath", "ninja", "pooch", "pytest", "pytest-cov", "pytest-timeout", "pytest-xdist", "scikit-umfpack", "threadpoolctl"]
 
 [[package]]
+name = "segmentation-models"
+version = "1.0.1"
+description = "Image segmentation models with pre-trained backbones with Keras."
+optional = false
+python-versions = ">=3.0.0"
+files = [
+    {file = "segmentation_models-1.0.1-py3-none-any.whl", hash = "sha256:2c52ca7b2485b5071ffbf11b771c69179e896b3ba47b0f8704aeab00f9f91ce3"},
+    {file = "segmentation_models-1.0.1.tar.gz", hash = "sha256:fee0b9aedc17bb487b4e4127033f28c35c1c182ef726ebe5deeea071e4cadff4"},
+]
+
+[package.dependencies]
+efficientnet = "1.0.0"
+image-classifiers = "1.0.0"
+keras-applications = ">=1.0.7,<=1.0.8"
+
+[package.extras]
+tests = ["pytest", "scikit-image"]
+
+[[package]]
 name = "setuptools"
 version = "80.9.0"
 description = "Easily download, build, install, upgrade, and uninstall Python packages"
@@ -2502,4 +2574,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "657805c0adbcb607f94d8e177583ccd26600833f323e3a8739c6fce820fabcab"
+content-hash = "b15aabaed63c9e28a40afac0ec190ca3363c046f857634dfb83b76ba7782988c"
