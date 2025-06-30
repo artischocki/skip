@@ -1,4 +1,3 @@
-from keras.models import load_model
 from pathlib import Path
 import cv2
 import os
@@ -53,9 +52,11 @@ def align_imgs(int_dir, out_dir):
 
     for filename in tqdm(image_files):
         # if already present in aligned folder skip. accidentally keyboard interupted :P
-        # if "aligned_" + filename in os.listdir(aligned_folder):
-        #     print(f"Skipping {filename} because already aligned. Delete from aligned dir if you want to realign.")
-        #     continue
+        if "aligned_" + filename in os.listdir(aligned_dir):
+            print(
+                f"Skipping {filename} because already aligned. Delete from aligned dir if you want to realign."
+            )
+            continue
         img_path = os.path.join(int_dir, filename)
         imgTest = cv2.imread(img_path)
         imgTest_gray = cv2.cvtColor(imgTest, cv2.COLOR_BGR2GRAY)
