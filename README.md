@@ -79,5 +79,12 @@ pipeline/wear_measurement/preprocess.py
 3. Resizing
 
 
-## 5. Wear Measuremnt
-- Auswertung folgt # TODO
+## 5. Wear Measurement Inferenz
+```
+pipeline/wear_measurement/inference.py
+```
+Hier findet die Inferenz statt. Anschließend werden die Predictions mit
+find_contours auf den größte zusammenhängen Fetzen reduziert. Zuletzt findet
+noch eine open/close operation statt um löcher bzw inseln in den predictions zu entfernen.
+- Ich generiere hierzu auch overlays die kann ich euch schicken
+
