@@ -58,6 +58,7 @@ pipeline/train/train.py
 - Wir haben einen Train-Val Split von 70/30 genommen, weil wir mehr Daten durch die umfangreiche augmentierung hatten.
 - Im Training zusätzlich Early Stopping und Checkpointing implementiert
 - Weil wir so einen großen Datensatz haben fällt innerhalb der ersten 2 Epochen bereits der Loss unter 0.1
+- Training des finalen Netzes: 10 Epochen, je 30 min -> 5h
 - Metriken und lossplot fürs beste Netz fehlen noch, reiche ich euch nach, TODO 
 - Ich habe eine Reihe an Lossplots von den ganzen verschiedenen Trainings mit unterschiedlichen Trainingsdatensätzen und teilweise auch anderen Netzen die ich ausprobiert habe. Reich ich euch auch nach wenn ihr wollt. Ist vllt relevant für eine gute Note. Ich habe auch noch ganz einfache Netzarchitekturen implementiert.
 
