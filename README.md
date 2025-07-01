@@ -55,12 +55,18 @@ man evtl auch für die präsi verwenden. Pushe die auch.
 pipeline/train/train.py
 ```
 - Hier haben wir uns an die im Notebook vorgegebene Netz-Architektur gehalten.
-- Wir haben einen Train-Val Split von 70/30 genommen, weil wir mehr Daten durch die umfangreiche augmentierung hatten.
+- Wir haben einen Train-Val Split von 70/30 genommen, weil wir mehr Daten durch
+  die umfangreiche augmentierung hatten.
 - Im Training zusätzlich Early Stopping und Checkpointing implementiert
-- Weil wir so einen großen Datensatz haben fällt innerhalb der ersten 2 Epochen bereits der Loss unter 0.1
+- Weil wir so einen großen Datensatz haben fällt innerhalb der ersten 2 Epochen
+  bereits der Loss unter 0.1
 - Training des finalen Netzes: 10 Epochen, je 30 min -> 5h
 - Metriken und lossplot fürs beste Netz fehlen noch, reiche ich euch nach, TODO 
-- Ich habe eine Reihe an Lossplots von den ganzen verschiedenen Trainings mit unterschiedlichen Trainingsdatensätzen und teilweise auch anderen Netzen die ich ausprobiert habe. Reich ich euch auch nach wenn ihr wollt. Ist vllt relevant für eine gute Note. Ich habe auch noch ganz einfache Netzarchitekturen implementiert.
+- Ich habe eine Reihe an Lossplots von den ganzen verschiedenen Trainings mit
+  unterschiedlichen Trainingsdatensätzen und teilweise auch anderen Netzen die
+  ich ausprobiert habe. Reich ich euch auch nach wenn ihr wollt. Ist vllt
+  relevant für eine gute Note. Ich habe auch noch ganz einfache
+  Netzarchitekturen implementiert.
 
 ## 3. Evaluation
 ```
@@ -74,7 +80,8 @@ pipeline/eval/eval.py
 ```
 pipeline/wear_measurement/preprocess.py
 ```
-1. Aligning (hab ich mir nicht angeschaut, hab da straight benutzt was GPT mir gegeben hat und hat gut gefunzt, params könnt ihr aus der File rauslesen)
+1. Aligning (hab ich mir nicht angeschaut, hab da straight benutzt was GPT mir
+   gegeben hat und hat gut gefunzt, params könnt ihr aus der File rauslesen)
 2. Cropping
 3. Resizing
 
@@ -88,3 +95,14 @@ find_contours auf den größte zusammenhängen Fetzen reduziert. Zuletzt findet
 noch eine open/close operation statt um löcher bzw inseln in den predictions zu entfernen.
 - Ich generiere hierzu auch overlays die kann ich euch schicken
 
+
+## 6. Wear Measurement
+```
+pipeline/wear_measurement/wear_measurement.py
+```
+- Hier zuerst den korrekten winkel finden mit dem wir messen wollen. Dazu
+  finden wir die kanten mit canny edge detection in allen bildern
+- Wir nehmen den Median als gerade von der wir aus messen
+- In Wahrheit hab ich hier gepfuscht und den Winkel einfach auf 55.78Grad gesetzt
+  weils nicht gescheit gefunzt hat und ich keine lust hatte mich damit
+  auseinanderzusetzen :D

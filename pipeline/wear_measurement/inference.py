@@ -9,20 +9,18 @@ from PIL import Image
 # Input and output directories
 base_dir = Path(__file__).parents[2] / "data" / "test" / "Images"
 resized_dir = base_dir / "resized"
+cropped_dir = base_dir / "cropped"
 predictions_dir = base_dir / "predictions"
+pred_overlay_dir = predictions_dir / "overlay"
 cleaned_predictions_dir = base_dir / "cleaned_predictions"
-overlay_dir = cleaned_predictions_dir / "overlay"
+cleaned_overlay_dir = cleaned_predictions_dir / "overlay"
 predictions_dir.mkdir(exist_ok=True)
 cleaned_predictions_dir.mkdir(exist_ok=True)
-overlay_dir.mkdir(exist_ok=True)
+cleaned_overlay_dir.mkdir(exist_ok=True)
+pred_overlay_dir.mkdir(exist_ok=True)
 
 
-model_path = (
-    Path(__file__).parents[2]
-    / "models"
-    / "best_model_10_epochs"
-    / "model_01_val_loss=0.2881.h5"
-)
+model_path = Path(__file__).parents[2] / "models" / "old_pipeline" / "model.h5"
 
 # Load the model
 model = load_model(model_path)
@@ -49,31 +47,46 @@ print(f"{image_dataset.shape=}")
 y_pred = model.predict(image_dataset)
 y_pred_thresh = (y_pred > 0.5).astype(np.uint8)
 
+
+def resize_mask(mask, orig_size):
+    mask_pil = Image.fromarray(mask)
+    mask_pil = mask_pil.resize(orig_size, resample=Image.NEAREST)
+    mask = np.array(mask_pil)
+    # Wieder binärisieren
+    mask = (mask > 127).astype(np.uint8) * 255
+    return mask
+
+
+def create_overlay(img_path, mask):
+    # Overlay-Bild erzeugen
+    img = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    mask_bool = (mask > 127).astype(np.uint8)
+    mask_color = np.zeros_like(img)
+    mask_color[:, :, 2] = 255  # Blau
+
+    alpha = 0.4
+    overlay = np.where(
+        mask_bool[..., None] == 1,
+        (alpha * mask_color + (1 - alpha) * img).astype(np.uint8),
+        img,
+    )
+    return Image.fromarray(overlay)
+
+
 # # Convert to image and save
 print("Saving predictions:")
-for img_path, pred_mask in tqdm(zip(resized_dir.glob("*.[jp][pn]g"), y_pred_thresh)):
+for img_path, pred_mask in tqdm(zip(cropped_dir.glob("*.[jp][pn]g"), y_pred_thresh)):
     pred_mask = pred_mask.squeeze() * 255  # shape: (512, 512)
+    orig_size = Image.open(img_path).size
+    pred_mask = resize_mask(pred_mask, orig_size)
     pred_img = Image.fromarray(pred_mask.astype(np.uint8))  # ensure correct type
-    pred_img = pred_img.resize((512, 512), Image.NEAREST)
     pred_img.save(predictions_dir / (f"pred_{img_path.stem}.png"))
-print("Done.")
-
-# Loop over a few examples
-print("Examples:")
-for i in range(3):
-    # Input image
-    plt.figure(figsize=(4, 4))
-    plt.imshow(image_dataset[i].squeeze(), cmap="gray")
-    plt.title("Input Image")
-    plt.axis("off")
-    plt.show()
-
-    # Predicted mask
-    plt.figure(figsize=(4, 4))
-    plt.imshow(y_pred_thresh[i].squeeze(), cmap="gray")
-    plt.title("Prediction")
-    plt.axis("off")
-    plt.show()
+    # Overlay-Bild erzeugen
+    overlay_img = create_overlay(img_path, pred_mask)
+    overlay_path = pred_overlay_dir / f"overlay_{img_path.stem}.png"
+    overlay_img.save(overlay_path)
 print("Done.")
 
 
@@ -102,7 +115,7 @@ def preprocess_mask(mask_bin):
 
 print("Cleaning masks and creating overlays:")
 mask_paths = sorted(predictions_dir.glob("pred_*.png"))
-img_paths = sorted(resized_dir.glob("*.[jp][pn]g"))
+img_paths = sorted(cropped_dir.glob("*.[jp][pn]g"))
 
 for img_path, mask_path in tqdm(zip(img_paths, mask_paths), total=len(img_paths)):
     # Maske laden und binarisieren
@@ -116,26 +129,17 @@ for img_path, mask_path in tqdm(zip(img_paths, mask_paths), total=len(img_paths)
     # Größtes zusammenhängendes Segment extrahieren
     cleaned_mask = get_largest_connected_component(mask_cleaned)
 
+    # Wieder auf originale Größe bringen
+    orig_size = Image.open(img_path).size
+    cleaned_mask = resize_mask(cleaned_mask, orig_size)
+
     # Speichern bereinigter Maske
     cleaned_path = cleaned_predictions_dir / mask_path.name
     Image.fromarray(cleaned_mask).save(cleaned_path)
 
     # Overlay-Bild erzeugen
-    img = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-    mask_bool = (cleaned_mask > 127).astype(np.uint8)
-    mask_color = np.zeros_like(img)
-    mask_color[:, :, 2] = 255  # Blau
-
-    alpha = 0.4
-    overlay = np.where(
-        mask_bool[..., None] == 1,
-        (alpha * mask_color + (1 - alpha) * img).astype(np.uint8),
-        img,
-    )
-
-    overlay_path = overlay_dir / f"overlay_{img_path.stem}.png"
-    Image.fromarray(overlay).save(overlay_path)
+    overlay_img = create_overlay(img_path, cleaned_mask)
+    overlay_path = cleaned_overlay_dir / f"overlay_{img_path.stem}.png"
+    overlay_img.save(overlay_path)
 
 print("Done. Cleaned masks and overlays saved.")

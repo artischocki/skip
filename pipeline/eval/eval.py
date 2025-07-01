@@ -9,10 +9,8 @@ sys.path.insert(0, str(parent_dir))
 
 from train.train import load_data
 
-model_name = "best_model_10_epochs"
-model_path = (
-    Path(__file__).parents[2] / "models" / model_name / "model_01_val_loss=0.2881.h5"
-)
+model_name = "old_pipeline"
+model_path = Path(__file__).parents[2] / "models" / model_name / "model.h5"
 
 model = keras.models.load_model(model_path)
 

@@ -194,7 +194,7 @@ if __name__ == "__main__":
 
     # Train the model
 
-    model_name = "best_model_10_epochs"
+    model_name = "only_rotation"
     model_dir = Path(__file__).parents[2] / "models" / model_name
     model_dir.mkdir(exist_ok=True)
     early_stopping = keras.callbacks.EarlyStopping(monitor="loss", patience=3)
@@ -211,7 +211,7 @@ if __name__ == "__main__":
         y_train,
         batch_size=8,
         verbose=True,
-        epochs=10,
+        epochs=20,
         validation_data=(X_val, y_val),
         shuffle=False,
         callbacks=[early_stopping, checkpoint_cb],

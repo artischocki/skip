@@ -124,9 +124,9 @@ def save_img(img, path):
 
 transformations = {
     "": [no_trafo],
-    "_hflip": [h_flip],
-    "_vflip": [v_flip],
-    "_hflip_vflip": [h_flip, v_flip],
+    # "_hflip": [h_flip],
+    # "_vflip": [v_flip],
+    # "_hflip_vflip": [h_flip, v_flip],
 }
 
 imgs = sorted(list(resized_dir.glob("*.jpg")))
