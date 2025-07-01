@@ -11,7 +11,7 @@ from sklearn.cluster import DBSCAN
 # Configuration
 # ----------------------------------------
 # Pfad zur Input-Ordner mit bereinigten Masken
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Images"
+base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
 cleaned_pred_dir = base_dir / "cleaned_predictions"
 results_dir = base_dir / "wear_measurement"
 results_dir.mkdir(exist_ok=True)

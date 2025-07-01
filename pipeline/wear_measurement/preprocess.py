@@ -7,7 +7,7 @@ from tqdm import tqdm
 from PIL import Image
 
 # Folder with the images
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Images"
+base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
 raw_imgs_dir = base_dir / "images"
 cropped_dir = base_dir / "cropped"
 aligned_dir = base_dir / "aligned"
@@ -84,7 +84,7 @@ def align_imgs(int_dir, out_dir):
 
 
 def crop_imgs(input_dir: Path, output_dir) -> None:
-    for img_path in tqdm(list(input_dir.glob("*.jpg"))):
+    for img_path in tqdm(list(input_dir.glob("*.[jp][pn]g"))):
         # crop the center section ~> 1400W * 1840H
         with Image.open(img_path) as img:
             width, height = img.size
@@ -98,7 +98,7 @@ def crop_imgs(input_dir: Path, output_dir) -> None:
 
 
 def resize_imgs(input_dir: Path, output_dir) -> None:
-    for img_path in tqdm(list(input_dir.glob("*.jpg"))):
+    for img_path in tqdm(list(input_dir.glob("*.[jp][pn]g"))):
         # resize to 512 x 512
         with Image.open(img_path) as img:
             resized = img.resize((512, 512), Image.LANCZOS)

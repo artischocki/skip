@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 
 # Input and output directories
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Images"
+base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
 resized_dir = base_dir / "resized"
 cropped_dir = base_dir / "cropped"
 predictions_dir = base_dir / "predictions"

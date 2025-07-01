@@ -3,9 +3,9 @@ from pathlib import Path
 
 # --- Parameters & Paths ---
 # Video location
-video_name = "video0000030"
+video_name = "video0000031"
 base_dir = Path(__file__).parents[2] / "data" / "test" / "Video"
-extracted_frames_dir = base_dir / video_name
+extracted_frames_dir = base_dir / video_name / "images"
 extracted_frames_dir.mkdir(exist_ok=True)
 VIDEO_PATH = str(base_dir / f"{video_name}.avi")
 
