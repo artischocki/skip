@@ -78,6 +78,13 @@ pipeline/eval/eval.py
 - Eval mit IoU auch so wie in den Notebooks (jaccard_score)
 - Metrik fürs beste Netz geb ich euch # TODO
 
+- alte Pipeline:
+    - IoU: 0.3893436924389257
+- only rotation:
+    - IoU: 0.8516304680428908
+- all augmentations:
+    - IoU: 0.8799091568581078
+
 
 ## 4. Wear Measurement Preprocessing
 ```
@@ -110,11 +117,14 @@ ein zusammenhängender fetzen, kann noch löcher haben.
   passt.
 
 Hier Beispielhaft eine Prediction einmal vor und nach dem Cleaning.
+![Prediction](data/test/Images/predictions/pred_aligned_image0002500.png)
+![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002500.png)
 
-![Prediction](data/test/Images/predictions/pred_aligned_image0002587.png)
-![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002587.png)
+Ihr findet alle Predictions unter `data/test/Images/predictions` bzw.
+`data/test/Images/cleaned_predictions`. Ich hab auch zusätzlich overlays
+jeweils für alle predictions und alle cleaned predictions generiert, vllt wollt
+ihr die auch benutzen, liegen in den entsprechenden ordnern.
 
-Ihr findet alle Predictions unter `data/test/Images/predictions` bzw. `data/test/Images/cleaned_predictions`
 
 
 ## 6. Wear Measurement
@@ -160,3 +170,6 @@ pipeline/video/preprocess.py
     1. `wear_measurement/preprocess.py` -> alignte bilder, cropped resized
     2. `wear_measurement/inference.py` -> predictions, cleaned_predictions
     3. `wear_measurement/wear_measurement.py` -> wear_measurement ergebnisse
+Die Ergebnisse vom wear_measurement findet ihr unter
+`data/test/Video/video0000030/wear_measurement` &
+`data/test/Video/video0000031/wear_measurement`.
