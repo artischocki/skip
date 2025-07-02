@@ -15,6 +15,9 @@ Danach files ausführen mit:
 poetry run python pipeline/train/preprocess.py # Beispiel
 ```
 
+In den Notebooks steht mittlerweile nichts sinnvolles mehr drin, die habe ich
+nur zum rumexperimentieren benutzt.
+
 
 ## 1. Data Preprocessing
 ```
@@ -100,9 +103,44 @@ noch eine open/close operation statt um löcher bzw inseln in den predictions zu
 ```
 pipeline/wear_measurement/wear_measurement.py
 ```
-- Hier zuerst den korrekten winkel finden mit dem wir messen wollen. Dazu
+1. Hier zuerst den korrekten winkel finden mit dem wir messen wollen. Dazu
   finden wir die kanten mit canny edge detection in allen bildern
-- Wir nehmen den Median als gerade von der wir aus messen
-- In Wahrheit hab ich hier gepfuscht und den Winkel einfach auf 55.78Grad gesetzt
-  weils nicht gescheit gefunzt hat und ich keine lust hatte mich damit
-  auseinanderzusetzen :D
+    - Wir nehmen den Median als gerade von der wir aus messen
+    - In Wahrheit hab ich hier gepfuscht und den Winkel einfach auf 55.78Grad gesetzt
+      weils nicht gescheit gefunzt hat und ich keine lust hatte mich damit
+      auseinanderzusetzen :D (aber schreibt das mit dem winkel finden tzd gern in
+      die präsi, hört sich besser an)
+2. Danach suchen wir von der kante aus die breiteste stelle in der maske und
+   das ist unser ergebnis je frame
+3. die kanten sortieren (jeweils 4 aufeinanderfolgende bilder die zu den
+   jeweiligen 4 schneiden gehören, und das im 8 frame takt, sieht man an den
+   Bilder-Filenamen)
+4. plotten der ergebnisse über die schnittnummern, einmal alles in einem diagramm
+5. dann nochmal in einzelnen diagrammen, dort mit dbscan die outlier markiert,
+   parameter für DBSCAN: `DBSCAN(eps=15, min_samples=2)`
+Ergebnisse von diesen Schritten:
+![VBMax_plot_all](data/test/wear_measurement/VBMax_plot_all)
+![VBMax_plot_edge_1](data/test/wear_measurement/VBMax_plot_edge_1)
+![VBMax_plot_edge_2](data/test/wear_measurement/VBMax_plot_edge_2)
+![VBMax_plot_edge_3](data/test/wear_measurement/VBMax_plot_edge_3)
+![VBMax_plot_edge_4](data/test/wear_measurement/VBMax_plot_edge_4)
+![Measurement example 1](data/test/wear_measurement/example_1)
+![Measurement example 2](data/test/wear_measurement/example_2)
+![Measurement example 3](data/test/wear_measurement/example_3)
+![Measurement example 4](data/test/wear_measurement/example_4)
+
+## 7. Video
+```
+pipeline/video/preprocess.py
+```
+1. Preprocessing:
+    - hier habe ich mich nicht an die vorgaben aus dem Notebook gehalten, die war unnötig.
+    - ich bin stattdessen zur Extraktion folgendermaßen vorgegangen:
+        - im 17. Frame sieht man das erste mal die 1. schneide gut.
+        - danach folgt jedes 60. Frame wieder ein gut sichtbare schneide
+        - die sind nicht perfekt aligned, aber genau das mache ich später ja
+          mit dem image alignment, was wir vorher schon implementiert hatten
+2. Danach halte ich mich genau an die pipeline von image processing, also
+    1. `wear_measurement/preprocess.py` -> alignte bilder, cropped resized
+    2. `wear_measurement/inference.py` -> predictions, cleaned_predictions
+    3. `wear_measurement/wear_measurement.py` -> wear_measurement ergebnisse
