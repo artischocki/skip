@@ -87,6 +87,9 @@ pipeline/wear_measurement/preprocess.py
    gegeben hat und hat gut gefunzt, params könnt ihr aus der File rauslesen)
 2. Cropping
 3. Resizing
+Ich habe die Bilder alle hier hochgeladen. Ihr könnt vllt ein gif machen aus
+den unalignten bildern und den alignten, damit man den Unterschied sieht.
+Liegen unter `data/test/Images/images` bzw. `data/test/Images/aligned`.
 
 
 ## 5. Wear Measurement Inferenz
@@ -95,8 +98,23 @@ pipeline/wear_measurement/inference.py
 ```
 Hier findet die Inferenz statt. Anschließend werden die Predictions mit
 find_contours auf den größte zusammenhängen Fetzen reduziert. Zuletzt findet
-noch eine open/close operation statt um löcher bzw inseln in den predictions zu entfernen.
-- Ich generiere hierzu auch overlays die kann ich euch schicken
+noch eine morphologische CLOSE und anschliessend OPEN operation statt.
+Die ist sind sinnvoll, weil die labels teilweise löchrig sind. D.h. auch
+ein zusammenhängender fetzen, kann noch löcher haben.
+- Beim Close wird zuerst dilatiert und dann wieder mit dem selben kernel
+  erodiert -> führt dazu, dass löcher geschlossen werden
+- Beim Open genau andersrun also zuerst erodieren, dann dilatieren, führt dazu
+  dass die inseln entfernt werden, eig unnötig, weil findcontours das schon
+  macht aber habs tzd dringelassen, beide operationen auch dazu führen, dass
+  die labels etwas glattkantiger werden, was auch eher zu der groundtruth
+  passt.
+
+Hier Beispielhaft eine Prediction einmal vor und nach dem Cleaning.
+
+![Prediction](data/test/Images/predictions/pred_aligned_image0002074.png)
+![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002074.png)
+
+Ihr findet alle Predictions unter `data/test/Images/predictions` bzw. `data/test/Images/cleaned_predictions`
 
 
 ## 6. Wear Measurement
@@ -119,15 +137,13 @@ pipeline/wear_measurement/wear_measurement.py
 5. dann nochmal in einzelnen diagrammen, dort mit dbscan die outlier markiert,
    parameter für DBSCAN: `DBSCAN(eps=15, min_samples=2)`
 Ergebnisse von diesen Schritten:
+![Measurement example 1](data/test/Images/wear_measurement/example_1.png)
+![Measurement example 3](data/test/Images/wear_measurement/example_3.png)
 ![VBMax_plot_all](data/test/Images/wear_measurement/VBMax_plot_all.png)
 ![VBMax_plot_edge_1](data/test/Images/wear_measurement/VBMax_plot_edge_1.png)
 ![VBMax_plot_edge_2](data/test/Images/wear_measurement/VBMax_plot_edge_2.png)
 ![VBMax_plot_edge_3](data/test/Images/wear_measurement/VBMax_plot_edge_3.png)
 ![VBMax_plot_edge_4](data/test/Images/wear_measurement/VBMax_plot_edge_4.png)
-![Measurement example 1](data/test/Images/wear_measurement/example_1.png)
-![Measurement example 2](data/test/Images/wear_measurement/example_2.png)
-![Measurement example 3](data/test/Images/wear_measurement/example_3.png)
-![Measurement example 4](data/test/Images/wear_measurement/example_4.png)
 
 ## 7. Video
 ```
