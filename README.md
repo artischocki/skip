@@ -152,8 +152,8 @@ pipeline/wear_measurement/wear_measurement.py
 5. dann nochmal in einzelnen diagrammen, dort mit dbscan die outlier markiert,
    parameter für DBSCAN: `DBSCAN(eps=15, min_samples=2)`
 Ergebnisse von diesen Schritten:
-![Measurement example 1](data/test/Images/wear_measurement/example_1.png)
-![Measurement example 3](data/test/Images/wear_measurement/example_3.png)
+![Measurement example 1](data/test/Images/wear_measurement_old_pipeline/example_1.png)
+![Measurement example 3](data/test/Images/wear_measurement_old_pipeline/example_3.png)
 ![VBMax_plot_all](data/test/Images/wear_measurement/VBMax_plot_all.png)
 ![VBMax_plot_edge_1](data/test/Images/wear_measurement/VBMax_plot_edge_1.png)
 ![VBMax_plot_edge_2](data/test/Images/wear_measurement/VBMax_plot_edge_2.png)
