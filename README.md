@@ -111,8 +111,8 @@ ein zusammenhängender fetzen, kann noch löcher haben.
 
 Hier Beispielhaft eine Prediction einmal vor und nach dem Cleaning.
 
-![Prediction](data/test/Images/predictions/pred_aligned_image0002074.png)
-![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002074.png)
+![Prediction](data/test/Images/predictions/pred_aligned_image0002587.png)
+![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002587.png)
 
 Ihr findet alle Predictions unter `data/test/Images/predictions` bzw. `data/test/Images/cleaned_predictions`
 
