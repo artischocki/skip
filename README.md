@@ -64,26 +64,31 @@ pipeline/train/train.py
 - Weil wir so einen großen Datensatz haben fällt innerhalb der ersten 2 Epochen
   bereits der Loss unter 0.1
 - Training des finalen Netzes: 10 Epochen, je 30 min -> 5h
-- Metriken und lossplot fürs beste Netz fehlen noch, reiche ich euch nach, TODO 
-- Ich habe eine Reihe an Lossplots von den ganzen verschiedenen Trainings mit
-  unterschiedlichen Trainingsdatensätzen und teilweise auch anderen Netzen die
-  ich ausprobiert habe. Reich ich euch auch nach wenn ihr wollt. Ist vllt
-  relevant für eine gute Note. Ich habe auch noch ganz einfache
-  Netzarchitekturen implementiert.
+- Ich habe mehrere netze trainiert, siehe 3. Evaluation
+- Die lossplots habe ich leider verloren, bzw kann sie nichtmehr richtig zuordnen :D
+- Hier sind die plots die ich noch habe:
+![Loss Plot 1](models/loss_plot.png)
+![Loss Plot 2](models/best_segmentation_model_hflip_vflip_4_degree_rotate.pt_loss_plot.png)
+![Loss Plot 3](models/letzter_run.png)
+- Der letzte Plot gehört ziemlich sicher zu dem onlyrotations netz, also das
+  was wir am ende auch verwendet haben.
+
 
 ## 3. Evaluation
 ```
 pipeline/eval/eval.py
 ```
-- Eval mit IoU auch so wie in den Notebooks (jaccard_score)
-- Metrik fürs beste Netz geb ich euch # TODO
+- Eval mit IoU auch so wie in den Notebooks (jaccard_score):
+    - alte Pipeline: (rotation zw -180, 180, random h_flips und random v_flips)
+        - IoU: 0.3893436924389257
+    - only rotation: (rotation zw. -3 und 3)
+        - IoU: 0.8516304680428908
+    - all augmentations: (rotation zw -5 und 5, je mit h, v, h+v)
+        - IoU: 0.8799091568581078
 
-- alte Pipeline:
-    - IoU: 0.3893436924389257
-- only rotation:
-    - IoU: 0.8516304680428908
-- all augmentations:
-    - IoU: 0.8799091568581078
+Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all
+augmentations, dass das netz mit nur rotation aber besser tut beim wear
+measurement! Also habe ich damit weitergearbeitet.
 
 
 ## 4. Wear Measurement Preprocessing
