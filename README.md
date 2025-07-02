@@ -119,15 +119,15 @@ pipeline/wear_measurement/wear_measurement.py
 5. dann nochmal in einzelnen diagrammen, dort mit dbscan die outlier markiert,
    parameter für DBSCAN: `DBSCAN(eps=15, min_samples=2)`
 Ergebnisse von diesen Schritten:
-![VBMax_plot_all](data/test/wear_measurement/VBMax_plot_all)
-![VBMax_plot_edge_1](data/test/wear_measurement/VBMax_plot_edge_1)
-![VBMax_plot_edge_2](data/test/wear_measurement/VBMax_plot_edge_2)
-![VBMax_plot_edge_3](data/test/wear_measurement/VBMax_plot_edge_3)
-![VBMax_plot_edge_4](data/test/wear_measurement/VBMax_plot_edge_4)
-![Measurement example 1](data/test/wear_measurement/example_1)
-![Measurement example 2](data/test/wear_measurement/example_2)
-![Measurement example 3](data/test/wear_measurement/example_3)
-![Measurement example 4](data/test/wear_measurement/example_4)
+![VBMax_plot_all](data/test/Images/wear_measurement/VBMax_plot_all)
+![VBMax_plot_edge_1](data/test/Images/wear_measurement/VBMax_plot_edge_1)
+![VBMax_plot_edge_2](data/test/Images/wear_measurement/VBMax_plot_edge_2)
+![VBMax_plot_edge_3](data/test/Images/wear_measurement/VBMax_plot_edge_3)
+![VBMax_plot_edge_4](data/test/Images/wear_measurement/VBMax_plot_edge_4)
+![Measurement example 1](data/test/Images/wear_measurement/example_1)
+![Measurement example 2](data/test/Images/wear_measurement/example_2)
+![Measurement example 3](data/test/Images/wear_measurement/example_3)
+![Measurement example 4](data/test/Images/wear_measurement/example_4)
 
 ## 7. Video
 ```
