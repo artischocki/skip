@@ -83,7 +83,7 @@ pipeline/eval/eval.py
         - IoU: 0.3893436924389257
     - only rotation: (rotation zw. -3 und 3)
         - IoU: 0.8516304680428908
-    - all augmentations: (rotation zw -5 und 5, je mit h, v, h+v)
+    - all augmentations: (rotation zw -3 und 3, je mit h, v, h+v)
         - IoU: 0.8799091568581078
 
 Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all
