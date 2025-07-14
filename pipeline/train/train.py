@@ -10,7 +10,6 @@ import keras
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.metrics import MeanIoU
-from sklearn.model_selection import train_test_split
 import cv2
 import numpy as np
 from pathlib import Path
@@ -21,6 +20,8 @@ import tensorflow as tf
 
 SIZE = 512
 INPUTS = Input((SIZE, SIZE, 1))
+
+MODEL_NAME = "correct_split_all_augementations"
 
 
 def create_model() -> Model:
@@ -127,29 +128,11 @@ def create_model() -> Model:
     return model
 
 
-def load_data():
+def load_data(augmented_dir: Path):
     img_dataset = []
     mask_dataset = []
-    imgs = sorted(
-        list(
-            (
-                Path(__file__).parents[2]
-                / "data"
-                / "train"
-                / "all_images_and_labels_augmented"
-            ).glob("*.jpg")
-        )
-    )
-    masks = sorted(
-        list(
-            (
-                Path(__file__).parents[2]
-                / "data"
-                / "train"
-                / "all_images_and_labels_augmented"
-            ).glob("*.png")
-        )
-    )
+    imgs = sorted(list(augmented_dir.glob("*.jpg")))
+    masks = sorted(list(augmented_dir.glob("*.png")))
     for img_path, mask_path in tqdm(zip(imgs, masks), desc="Loading Data"):
         img = cv2.imread(str(img_path), cv2.IMREAD_COLOR)
         mask = cv2.imread(str(mask_path), cv2.IMREAD_GRAYSCALE)
@@ -163,27 +146,28 @@ def load_data():
         mask_dataset.append(mask)
 
     # convert lists to numpy arrays and add channel dimension
-    img_dataset = np.array(img_dataset).reshape(-1, SIZE, SIZE, 1)
-    mask_dataset = np.array(mask_dataset).reshape(-1, SIZE, SIZE, 1)
+    x = np.array(img_dataset).reshape(-1, SIZE, SIZE, 1)
+    y = np.array(mask_dataset).reshape(-1, SIZE, SIZE, 1)
 
-    # Split into training and testing sets (70% train, 30% val)
-    X_train, X_val, y_train, y_val = train_test_split(
-        img_dataset, mask_dataset, test_size=0.30, random_state=42
-    )
-
-    print("Done Loading Data.")
-
-    print(f"Training set: {X_train.shape}, {y_train.shape}")
-    print(f"Validation set:  {X_val.shape}, {y_val.shape}")
-
-    return X_train, X_val, y_train, y_val
+    return x, y
 
 
 if __name__ == "__main__":
     # Load model
     model = create_model()
     # Load data
-    X_train, X_val, y_train, y_val = load_data()
+    print("Loading Data...")
+    train_data_path = (
+        Path(__file__).parents[2] / "data" / "training" / "train" / "augmented"
+    )
+    val_data_path = (
+        Path(__file__).parents[2] / "data" / "training" / "val" / "augmented"
+    )
+    X_train, y_train = load_data(train_data_path)
+    X_val, y_val = load_data(val_data_path)
+    print("Done Loading Data.")
+    print(f"Training set: {X_train.shape}, {y_train.shape}")
+    print(f"Validation set:  {X_val.shape}, {y_val.shape}")
 
     # cuda?
     gpus = tf.config.list_physical_devices("GPU")
@@ -247,4 +231,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
-    plt.savefig(f"{model_name}_loss.png")
+    plt.savefig(model_dir / f"{model_name}_lossplot.png")
