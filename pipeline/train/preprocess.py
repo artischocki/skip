@@ -146,8 +146,8 @@ if __name__ == "__main__":
 
     for dir_name, dir in dirs.items():
         print(f"Preprocessing: {dir_name}")
-        raw_imgs = list(dir.glob("*.jpg"))
-        raw_labels = list(dir.glob("*.png"))
+        raw_imgs = list((dir / "raw").glob("*.jpg"))
+        raw_labels = list((dir / "raw").glob("*.png"))
         cropped_dir = dir / "cropped"
         overlay_dir = dir / "overlays"
         resized_dir = dir / "resized"
