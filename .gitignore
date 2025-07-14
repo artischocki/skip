@@ -3,4 +3,5 @@ data/training/*/resized/
 data/training/*/cropped/
 data/training/*/augmented/
 data/training/*/overlays/
+*pt
 
