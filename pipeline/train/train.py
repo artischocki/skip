@@ -178,8 +178,7 @@ if __name__ == "__main__":
 
     # Train the model
 
-    model_name = "only_rotation"
-    model_dir = Path(__file__).parents[2] / "models" / model_name
+    model_dir = Path(__file__).parents[2] / "models" / MODEL_NAME
     model_dir.mkdir(exist_ok=True)
     early_stopping = keras.callbacks.EarlyStopping(monitor="loss", patience=3)
     checkpoint_cb = keras.callbacks.ModelCheckpoint(
@@ -194,7 +193,6 @@ if __name__ == "__main__":
         X_train,
         y_train,
         batch_size=8,
-        verbose=True,
         epochs=20,
         validation_data=(X_val, y_val),
         shuffle=False,
@@ -231,4 +229,4 @@ if __name__ == "__main__":
 
     plt.tight_layout()
     plt.show()
-    plt.savefig(model_dir / f"{model_name}_lossplot.png")
+    plt.savefig(model_dir / f"{MODEL_NAME}_lossplot.png")
