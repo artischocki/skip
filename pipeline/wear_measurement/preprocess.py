@@ -7,7 +7,8 @@ from tqdm import tqdm
 from PIL import Image
 
 # Folder with the images
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
+# base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
+base_dir = Path(__file__).parents[2] / "data" / "inference" / "Images"
 raw_imgs_dir = base_dir / "images"
 cropped_dir = base_dir / "cropped"
 aligned_dir = base_dir / "aligned"

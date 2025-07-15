@@ -7,7 +7,7 @@ import numpy as np
 from PIL import Image
 
 # Input and output directories
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
+base_dir = Path(__file__).parents[2] / "data" / "inference" / "Images"
 resized_dir = base_dir / "resized"
 cropped_dir = base_dir / "cropped"
 predictions_dir = base_dir / "predictions"
@@ -20,7 +20,12 @@ cleaned_overlay_dir.mkdir(exist_ok=True)
 pred_overlay_dir.mkdir(exist_ok=True)
 
 
-model_path = Path(__file__).parents[2] / "models" / "old_pipeline" / "model.h5"
+model_path = (
+    Path(__file__).parents[2]
+    / "models"
+    / "correct_split_all_augmentations"
+    / "model.h5"
+)
 
 # Load the model
 model = load_model(model_path)

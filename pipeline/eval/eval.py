@@ -9,7 +9,7 @@ sys.path.insert(0, str(parent_dir))
 
 from train.train import load_data
 
-model_name = "correct_split_all_augementations"
+model_name = "correct_split_only_rotation"
 model_path = Path(__file__).parents[2] / "models" / model_name / "model.h5"
 
 model = keras.models.load_model(model_path)
@@ -18,7 +18,7 @@ model.summary()
 
 # --- 2. Calculate Intersection over Union (IoU) on test set ---
 # 2.1 Get predictions and threshold to binary masks
-data_path = Path(__file__).parents[2] / "data" / "training" / "test" / "augmented"
+data_path = Path(__file__).parents[2] / "data" / "training" / "test" / "resized"
 X_test, y_test = load_data(data_path)
 y_pred = model.predict(X_test)
 y_pred_thresh = (y_pred > 0.5).astype(np.uint8)

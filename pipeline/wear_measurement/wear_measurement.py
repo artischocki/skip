@@ -6,19 +6,21 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.cluster import DBSCAN
+from tqdm import tqdm
 
 # ----------------------------------------
 # Configuration
 # ----------------------------------------
 # Pfad zur Input-Ordner mit bereinigten Masken
-base_dir = Path(__file__).parents[2] / "data" / "test" / "Video" / "video0000031"
-cleaned_pred_dir = base_dir / "cleaned_predictions"
-results_dir = base_dir / "wear_measurement"
+base_dir = Path(__file__).parents[2] / "data" / "inference" / "Images"
+cleaned_pred_dir = base_dir / "cleaned_predictions_all_aug"
+results_dir = base_dir / "wear_measurement_all_aug"
 results_dir.mkdir(exist_ok=True)
+for i in range(1, 5):
+    (results_dir / f"{i}").mkdir(exist_ok=True)
 PIXEL_SIZE_UM = 1.725
 
 # Wie viele Beispielbilder mit eingezeichneter Maximalbreite anzeigen?
-EXAMPLES_TO_SHOW = 4
 
 
 # ----------------------------------------
@@ -51,7 +53,8 @@ def get_main_angle(mask):
 def rotate_image_and_mask(img, angle_deg):
     """Rotiere Bild um angle_deg um sein Zentrum (nearest-neighbor, border=0)."""
     h, w = img.shape[:2]
-    M = cv2.getRotationMatrix2D((w / 2, h / 2), angle_deg, 1.0)
+    M = cv2.getRotationMatrix2D((w, h / 2), angle_deg, 1.0)
+    w *= 2
     return cv2.warpAffine(img, M, (w, h), flags=cv2.INTER_NEAREST, borderValue=0)
 
 
@@ -85,10 +88,8 @@ for fn in sorted(os.listdir(cleaned_pred_dir))[-5:]:
     _, binary = cv2.threshold(mask, 127, 255, cv2.THRESH_BINARY)
     angles.append(get_main_angle(binary))
 
-if not angles:
-    raise RuntimeError("Keine Masken gefunden oder keine Winkel detektiert.")
 # main_angle = float(np.median(angles))
-main_angle = 55.78
+main_angle = 55.78  # der ausgemessene echte wert über die alignten bilder. einfach den verwenden, anstatt auf krampf iein winkel zu detektieren!
 print(f"Verwendeter globaler Drehwinkel: {main_angle:.2f}°")
 
 # ----------------------------------------
@@ -97,10 +98,11 @@ print(f"Verwendeter globaler Drehwinkel: {main_angle:.2f}°")
 VBmax = []
 cut_numbers = []
 
-shown = 0
-for fn in sorted(os.listdir(cleaned_pred_dir)):
+
+for i, fn in tqdm(enumerate(sorted(os.listdir(cleaned_pred_dir)))):
     if not fn.lower().endswith((".png", ".jpg", ".jpeg", ".tif")):
         continue
+    edge_id = i % 4
 
     # a) Cut-Nummer extrahieren
     cut_num = extract_cut_number(fn)
@@ -118,18 +120,16 @@ for fn in sorted(os.listdir(cleaned_pred_dir)):
     thickness_px, (x_max, y0, y1) = measure_max_thickness_with_coords(rotated)
     VBmax.append(thickness_px * PIXEL_SIZE_UM)
 
-    # e) Beispiel-Visualisierung (erst EXAMPLES_TO_SHOW Bilder)
-    if shown < EXAMPLES_TO_SHOW:
-        shown += 1
-        vis = cv2.cvtColor(rotated, cv2.COLOR_GRAY2BGR)
-        cv2.line(vis, (x_max, y0), (x_max, y1), (255, 0, 0), 2)
-        plt.figure(figsize=(4, 6))
-        plt.imshow(vis)
-        plt.title(f"{fn}\nVBmax = {thickness_px*PIXEL_SIZE_UM:.1f} μm")
-        plt.axis("off")
-        out_path = results_dir / f"example_{shown}.png"
-        plt.savefig(out_path, bbox_inches="tight", dpi=300)
-        plt.close()
+    # e) Visualisierung
+    vis = cv2.cvtColor(rotated, cv2.COLOR_GRAY2BGR)
+    cv2.line(vis, (x_max, y0), (x_max, y1), (255, 0, 0), 2)
+    plt.figure(figsize=(4, 6))
+    plt.imshow(vis)
+    plt.title(f"{fn}\nVBmax = {thickness_px*PIXEL_SIZE_UM:.1f} μm")
+    plt.axis("off")
+    out_path = results_dir / f"{edge_id + 1}" / f"{str(cut_num).zfill(3)}.png"
+    plt.savefig(out_path, bbox_inches="tight", dpi=300)
+    plt.close()
 
 # f) Scatter-Plot der VBmax-Werte
 plt.figure(figsize=(10, 6))
@@ -152,7 +152,7 @@ plt.savefig(results_dir / "VBMax_plot_all.png")
 data = np.column_stack((cut_numbers, VBmax))
 
 # DBSCAN-Parameter eps und min_samples ggf. anpassen
-db = DBSCAN(eps=15, min_samples=2).fit(data)
+db = DBSCAN(eps=15, min_samples=3).fit(data)
 labels = db.labels_
 
 # Indizes der Ausreißer (label == -1)
