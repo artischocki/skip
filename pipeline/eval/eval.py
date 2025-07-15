@@ -9,7 +9,7 @@ sys.path.insert(0, str(parent_dir))
 
 from train.train import load_data
 
-model_name = "old_pipeline"
+model_name = "correct_split_all_augementations"
 model_path = Path(__file__).parents[2] / "models" / model_name / "model.h5"
 
 model = keras.models.load_model(model_path)
@@ -18,12 +18,13 @@ model.summary()
 
 # --- 2. Calculate Intersection over Union (IoU) on test set ---
 # 2.1 Get predictions and threshold to binary masks
-X_train, X_val, y_train, y_val = load_data()
-y_pred = model.predict(X_val)
+data_path = Path(__file__).parents[2] / "data" / "training" / "test" / "augmented"
+X_test, y_test = load_data(data_path)
+y_pred = model.predict(X_test)
 y_pred_thresh = (y_pred > 0.5).astype(np.uint8)
 
 # 2.2 Flatten arrays for jaccard_score
-y_true_flat = y_val.flatten()
+y_true_flat = y_test.flatten()
 y_pred_flat = y_pred_thresh.flatten()
 
 # 2.3 Compute IoU (Jaccard Index)
