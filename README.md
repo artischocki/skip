@@ -70,6 +70,7 @@ und `correct_split_all_augmentations`.
 - Training des finalen Netzes: 20 Epochen, je ca. 30min -> 10h (nur cpu)
 - Hier sind die 2 loss plots für 1. correct_split_all_augmentations und 2.
   correct_split_only_rotation:
+
 ![Loss Plot 1](models/correct_split_all_augmentations/correct_split_all_augementations_lossplot.png)
 ![Loss Plot 2](models/correct_split_only_rotation/correct_split_only_rotation_lossplot.png)
 
@@ -86,7 +87,7 @@ Hier haben wir mit den TestDaten evaluiert, also auf den 6 ungesehenen Bildern.
     - all augmentations: (rotation zw -3 und 3, je mit h, v, h+v)
         - IoU: 0.7995645707802462
     - reference: (das netz was die uns geben)
-        - IoU: 0.1790 (was? :D)
+        - IoU: 0.17898034672073565 (was? :D)
 
 Die Ergebnisse der Eval findet ihr unter: `pipeline/eval/results`:
 ![all_aug_eval](pipeline/eval/results/correct_split_all_augmentations/example_0.png)
@@ -95,9 +96,9 @@ Die Ergebnisse der Eval findet ihr unter: `pipeline/eval/results`:
 
 
 
-Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all
-augmentations, dass das netz mit nur rotation aber besser tut beim wear
-measurement!
+<!-- Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all -->
+<!-- augmentations, dass das netz mit nur rotation aber besser tut beim wear -->
+<!-- measurement! -->
 
 
 ## 4. Wear Measurement Preprocessing
@@ -108,6 +109,7 @@ pipeline/wear_measurement/preprocess.py
    gegeben hat und hat gut gefunzt, params könnt ihr aus der File rauslesen)
 2. Cropping
 3. Resizing
+
 Ich habe die Bilder alle hier hochgeladen. Ihr könnt vllt ein gif machen aus
 den unalignten bildern und den alignten, damit man den Unterschied sieht.
 Liegen unter `data/test/Images/images` bzw. `data/test/Images/aligned`.
@@ -117,27 +119,30 @@ Liegen unter `data/test/Images/images` bzw. `data/test/Images/aligned`.
 ```
 pipeline/wear_measurement/inference.py
 ```
-Hier findet die Inferenz statt. Anschließend werden die Predictions mit
+Hier findet die Inferenz statt. 
+
+Anschließend werden die Predictions mit
 find_contours auf den größte zusammenhängen Fetzen reduziert. Zuletzt findet
-noch eine morphologische CLOSE und anschliessend OPEN operation statt.
-Die ist sind sinnvoll, weil die labels teilweise löchrig sind. D.h. auch
-ein zusammenhängender fetzen, kann noch löcher haben.
-- Beim Close wird zuerst dilatiert und dann wieder mit dem selben kernel
-  erodiert -> führt dazu, dass löcher geschlossen werden
-- Beim Open genau andersrun also zuerst erodieren, dann dilatieren, führt dazu
-  dass die inseln entfernt werden, eig unnötig, weil findcontours das schon
-  macht aber habs tzd dringelassen, beide operationen auch dazu führen, dass
-  die labels etwas glattkantiger werden, was auch eher zu der groundtruth
-  passt.
+noch eine morphologische CLOSE und anschliessend OPEN operation statt. Die
+können wir uns auch sparen, weil wir am ende auch durch löcher durchmessen.
+braucht ihr auch nicht erwähnen in der präsi. Hab das nur gemacht damit die
+labels schöner aussehen.
 
-Hier Beispielhaft eine Prediction einmal vor und nach dem Cleaning.
-![Prediction](data/test/Images/predictions/pred_aligned_image0002500.png)
-![Cleaned Prediction](data/test/Images/cleaned_predictions/pred_aligned_image0002500.png)
-
-Ihr findet alle Predictions unter `data/test/Images/predictions` bzw.
-`data/test/Images/cleaned_predictions`. Ich hab auch zusätzlich overlays
+Ihr findet alle Predictions unter `data/inference/Images/predictions*` bzw.
+`data/inference/Images/cleaned_predictions*`. Ich hab auch zusätzlich overlays
 jeweils für alle predictions und alle cleaned predictions generiert, vllt wollt
 ihr die auch benutzen, liegen in den entsprechenden ordnern.
+
+UPDATE 1: Ich werde den teil mit dem grossen fetzen finden und OPEN und CLOSE
+nicht anpassen. Der typ hat ja gemeint, dass wir kein postprocessing machen
+sollen auf den Bildern. Aber unser "postprocessing", dient uns als ROI
+selection. Das funktioniert auf unseren Predictions gut, weil wir schon nah
+genug an der GT dran sind.
+
+UPDATE 2: Das mit dem cleaning funktioniert nicht mit denen ihrem schrottigen
+Netz, weil es so scheisse performt, dass alles ein schrottiger
+zusammenhängender unbrauchbarer fetzen ist (siehe eval bilder). Ich mach mir
+nicht die mühe da nochmal drauf zu messen.
 
 
 
@@ -148,10 +153,10 @@ pipeline/wear_measurement/wear_measurement.py
 1. Hier zuerst den korrekten winkel finden mit dem wir messen wollen. Dazu
   finden wir die kanten mit canny edge detection in allen bildern
     - Wir nehmen den Median als gerade von der wir aus messen
-    - In Wahrheit hab ich hier gepfuscht und den Winkel einfach auf 55.78Grad gesetzt
-      weils nicht gescheit gefunzt hat und ich keine lust hatte mich damit
-      auseinanderzusetzen :D (aber schreibt das mit dem winkel finden tzd gern in
-      die präsi, hört sich besser an)
+    - Das funktioniert semi gut
+    - In Wahrheit hab ich hier gepfuscht, weils vollkommen banane ist, wenn wir
+      eh alle images aligned haben und alle den selben winkel haben.
+    - Ich habe den Winkel ausgemessen und auf 55.78Grad gesetzt
 2. Danach suchen wir von der kante aus die breiteste stelle in der maske und
    das ist unser ergebnis je frame
 3. die kanten sortieren (jeweils 4 aufeinanderfolgende bilder die zu den
@@ -159,21 +164,36 @@ pipeline/wear_measurement/wear_measurement.py
    Bilder-Filenamen)
 4. plotten der ergebnisse über die schnittnummern, einmal alles in einem diagramm
 5. dann nochmal in einzelnen diagrammen, dort mit dbscan die outlier markiert,
-   parameter für DBSCAN: `DBSCAN(eps=15, min_samples=2)`
-Ergebnisse von diesen Schritten:
-![Measurement example 1](data/test/Images/wear_measurement_old_pipeline/example_1.png)
-![VBMax_plot_all](data/test/Images/wear_measurement/VBMax_plot_all.png)
-![VBMax_plot_edge_1](data/test/Images/wear_measurement/VBMax_plot_edge_1.png)
-![VBMax_plot_edge_2](data/test/Images/wear_measurement/VBMax_plot_edge_2.png)
-![VBMax_plot_edge_3](data/test/Images/wear_measurement/VBMax_plot_edge_3.png)
-![VBMax_plot_edge_4](data/test/Images/wear_measurement/VBMax_plot_edge_4.png)
+   parameter für DBSCAN: `DBSCAN(eps=15, min_samples=3)`
+
+### Ergebnisse von diesen Schritten:
+1. Für `all_augmentations`:
+![Measurement example 1](data/inference/Images/wear_measurement_all_aug/example_1.png)
+![VBMax_plot_all](data/inference/Images/wear_measurement_all_aug/VBMax_plot_all.png)
+![VBMax_plot_edge_1](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_1.png)
+![VBMax_plot_edge_2](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_2.png)
+![VBMax_plot_edge_3](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_3.png)
+![VBMax_plot_edge_4](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_4.png)
+
+2. Für `only_rotation`:
+![Measurement example 1](data/inference/Images/wear_measurement_only_rot/example_1.png)
+![VBMax_plot_all](data/inference/Images/wear_measurement_only_rot/VBMax_plot_all.png)
+![VBMax_plot_edge_1](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_1.png)
+![VBMax_plot_edge_2](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_2.png)
+![VBMax_plot_edge_3](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_3.png)
+![VBMax_plot_edge_4](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_4.png)
+
+- Ich habe auch die Messungen visualisiert und für die einzelnen schneidekanten
+  sortiert. Die sind unter `data/inference/wear_measurement_*/<1-4>`. Ihr könnt
+  hier auch vllt gifs erstellen.
 
 ## 7. Video
 ```
 pipeline/video/preprocess.py
 ```
 1. Preprocessing:
-    - hier habe ich mich nicht an die vorgaben aus dem Notebook gehalten, die war unnötig.
+    - hier habe ich mich nicht an die vorgaben aus dem Notebook gehalten, die
+      war wieder vollkommen overkill.
     - ich bin stattdessen zur Extraktion folgendermaßen vorgegangen:
         - im 17. Frame sieht man das erste mal die 1. schneide gut.
         - danach folgt jedes 60. Frame wieder ein gut sichtbare schneide
