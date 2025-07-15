@@ -18,29 +18,32 @@ poetry run python pipeline/train/preprocess.py # Beispiel
 In den Notebooks steht mittlerweile nichts sinnvolles mehr drin, die habe ich
 nur zum rumexperimentieren benutzt.
 
+Alles was für uns relevant ist steht mittlerweile in `/pipeline/`.
+
 
 ## 1. Data Preprocessing
 ```
 pipeline/train/preprocess.py
 ```
-Hier hatten wir eig nichts besonderes gemacht. Haben die Labels erstellt, die
-angepasst. Ich habe für das Training später auch noch meine Labels die ich
-versehentlich gelabelt hatte mit reingenommen.
-- Labels unter: `data/train/all_images_and_labels`
+1. Wir hatten noch die zusätzlichen Bilder und Labels aus dem kip2 repo, die
+   ich versehentlich gelabelt habe. Insgesamt hatten wir also 60 Bilder +
+   Labels. Ich habe diese unterteilt in train/val/split, siehe
+   `data/training/*/raw`. Train: 70% (42), Val: 20% (12), Test: 10% (6)
 
-Dann das Preprocessing wie in den Notebooks beschrieben:
-1. ROI cropping: -> `data/train/all_images_and_labels_cropped`
-2. Resizing: -> `data/train/all_images_and_labels_resized`
-3. Augmentierung -> `data/train/all_images_and_labels_augmented`
+2. Dann das Preprocessing wie in den Notebooks beschrieben:
+    1. ROI cropping: -> `data/training/*/cropped`
+    2. Resizing: -> `data/training/*/resized`
+    3. Augmentierung -> `data/training/*/augmented`
 
-Zur Augmentierung: Ich habe da für jedes Bild folgendes vorgenommen:
+3. Zur Augmentierung: Ich habe da für jedes Bild folgendes vorgenommen:
 - Rotate: -> jedes der Bilder wird jeweils um die Winkel [-3, -2, -1, 0, 1, 2, 3] gedreht
     - Für jedes dieser gedrehten Bilder mache ich folgende augmentierung:
         1. Nichts
         2. H-Flip
         3. V-Flip
         4. H-Flip + V-Flip (entsprivht Drehung um 180Grad)
-- Es ergibt sich ein Trainingsdatensatz von 3360 Bildern
+- Es ergibt sich ein datensatz von 1680 Bildern (summiert aus train/val/test)
+- Ich habe auch nur rotations trainiert. (siehe 2. Training)
 
 Wir haben auch mit Noise, Kontrastverstellung und Gaussian Blur rumprobiert,
 aber haben diese Modelle wieder verworfen, weil sie am Ende schlechter performt
@@ -53,42 +56,48 @@ Ich habe auch zusätzlich overlays generiert, da sieht man die labels, die kann
 man evtl auch für die präsi verwenden. Pushe die auch.
 
 
+
 ## 2. Training
 ```
 pipeline/train/train.py
 ```
+Insgesamt wurden bestimmt über 10 Netze trainiert aber ich schlage vor für die
+Präsi beschränken wir uns auf den finalen run mit `correct_split_only_rotations`
+und `correct_split_all_augmentations`.
+
 - Hier haben wir uns an die im Notebook vorgegebene Netz-Architektur gehalten.
-- Wir haben einen Train-Val Split von 70/30 genommen, weil wir mehr Daten durch
-  die umfangreiche augmentierung hatten.
 - Im Training zusätzlich Early Stopping und Checkpointing implementiert
-- Weil wir so einen großen Datensatz haben fällt innerhalb der ersten 2 Epochen
-  bereits der Loss unter 0.1
-- Training des finalen Netzes: 10 Epochen, je 30 min -> 5h
-- Ich habe mehrere netze trainiert, siehe 3. Evaluation
-- Die lossplots habe ich leider verloren, bzw kann sie nichtmehr richtig zuordnen :D
-- Hier sind die plots die ich noch habe:
-![Loss Plot 1](models/loss_plot.png)
-![Loss Plot 2](models/best_segmentation_model_hflip_vflip_4_degree_rotate.pt_loss_plot.png)
-![Loss Plot 3](models/letzter_run.png)
-- Der letzte Plot gehört ziemlich sicher zu dem onlyrotations netz, also das
-  was wir am ende auch verwendet haben.
+- Training des finalen Netzes: 20 Epochen, je ca. 30min -> 10h (nur cpu)
+- Hier sind die 2 loss plots für 1. correct_split_all_augmentations und 2.
+  correct_split_only_rotation:
+![Loss Plot 1](models/correct_split_all_augmentations/correct_split_all_augementations_lossplot.png)
+![Loss Plot 2](models/correct_split_only_rotation/correct_split_only_rotation_lossplot.png)
 
 
 ## 3. Evaluation
 ```
 pipeline/eval/eval.py
 ```
+Hier haben wir mit den TestDaten evaluiert, also auf den 6 ungesehenen Bildern.
+
 - Eval mit IoU auch so wie in den Notebooks (jaccard_score):
-    - alte Pipeline: (rotation zw -180, 180, random h_flips und random v_flips)
-        - IoU: 0.3893436924389257
     - only rotation: (rotation zw. -3 und 3)
-        - IoU: 0.8516304680428908
+        - IoU: 0.7350793416367187
     - all augmentations: (rotation zw -3 und 3, je mit h, v, h+v)
-        - IoU: 0.8799091568581078
+        - IoU: 0.7995645707802462
+    - reference: (das netz was die uns geben)
+        - IoU: 0.1790 (was? :D)
+
+Die Ergebnisse der Eval findet ihr unter: `pipeline/eval/results`:
+![all_aug_eval](pipeline/eval/results/correct_split_all_augmentations/example_0.png)
+![only_rot_eval](pipeline/eval/results/correct_split_only_rotation/example_0.png)
+![reference_eval](pipeline/eval/results/reference/example_0.png)
+
+
 
 Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all
 augmentations, dass das netz mit nur rotation aber besser tut beim wear
-measurement! Also habe ich damit weitergearbeitet.
+measurement!
 
 
 ## 4. Wear Measurement Preprocessing
