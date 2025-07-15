@@ -21,7 +21,7 @@ import tensorflow as tf
 SIZE = 512
 INPUTS = Input((SIZE, SIZE, 1))
 
-MODEL_NAME = "correct_split_all_augementations"
+MODEL_NAME = "correct_split_only_rotation"
 
 
 def create_model() -> Model:
