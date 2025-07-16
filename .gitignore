@@ -4,4 +4,5 @@ data/training/*/cropped/
 data/training/*/augmented/
 data/training/*/overlays/
 *pt
-
+data/inference/Images/cropped/
+data/inference/Images/resized/
