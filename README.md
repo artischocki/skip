@@ -82,16 +82,20 @@ pipeline/eval/eval.py
 Hier haben wir mit den TestDaten evaluiert, also auf den 6 ungesehenen Bildern.
 
 - Eval mit IoU auch so wie in den Notebooks (jaccard_score):
-    - only rotation: (rotation zw. -3 und 3)
-        - IoU: 0.7350793416367187
     - all augmentations: (rotation zw -3 und 3, je mit h, v, h+v)
         - IoU: 0.7995645707802462
+    - only rotation: (rotation zw. -3 und 3)
+        - IoU: 0.7350793416367187
     - reference: (das netz was die uns geben)
         - IoU: 0.17898034672073565 (was? :D)
 
 Die Ergebnisse der Eval findet ihr unter: `pipeline/eval/results`:
+
+All Aug:
 ![all_aug_eval](pipeline/eval/results/correct_split_all_augmentations/example_0.png)
+Only Rot:
 ![only_rot_eval](pipeline/eval/results/correct_split_only_rotation/example_0.png)
+Referenz:
 ![reference_eval](pipeline/eval/results/reference/example_0.png)
 
 
