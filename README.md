@@ -99,12 +99,6 @@ Referenz:
 ![reference_eval](pipeline/eval/results/reference/example_0.png)
 
 
-
-<!-- Später ist mir aufgefallen, dass obwohl die IoU besser ist bei all -->
-<!-- augmentations, dass das netz mit nur rotation aber besser tut beim wear -->
-<!-- measurement! -->
-
-
 ## 4. Wear Measurement Preprocessing
 ```
 pipeline/wear_measurement/preprocess.py
@@ -116,7 +110,7 @@ pipeline/wear_measurement/preprocess.py
 
 Ich habe die Bilder alle hier hochgeladen. Ihr könnt vllt ein gif machen aus
 den unalignten bildern und den alignten, damit man den Unterschied sieht.
-Liegen unter `data/test/Images/images` bzw. `data/test/Images/aligned`.
+Liegen unter `data/inference/Images/images` bzw. `data/inference/Images/aligned`.
 
 
 ## 5. Wear Measurement Inferenz
