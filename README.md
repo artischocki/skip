@@ -25,6 +25,8 @@ Alles was für uns relevant ist steht mittlerweile in `/pipeline/`.
 ```
 pipeline/train/preprocess.py
 ```
+Hinweis: Die falschen Bilder kommen aus: (https://github.com/EhsanWBK/KIP/tree/main/KIP)
+
 1. Wir hatten noch die zusätzlichen Bilder und Labels aus dem kip2 repo, die
    ich versehentlich gelabelt habe. Insgesamt hatten wir also 60 Bilder +
    Labels. Ich habe diese unterteilt in train/val/split, siehe
