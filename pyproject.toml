@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "kip"
+name = "skip"
 version = "0.1.0"
 description = ""
 authors = ["Artur Dernst <artur.dernst@proton.me>"]
@@ -7,14 +7,14 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+tensorflow = "^2.19.0"
+keras = "^3.10.0"
 opencv-python = "^4.12.0.88"
 pillow = "^11.3.0"
 scipy = "^1.16.0"
 scikit-image = "^0.25.2"
 tqdm = "^4.67.1"
 scikit-learn = "^1.7.0"
-tensorflow = "^2.19.0"
-keras = "^3.10.0"
 matplotlib = "^3.10.3"
 
 
