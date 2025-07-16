@@ -168,20 +168,20 @@ pipeline/wear_measurement/wear_measurement.py
 
 ### Ergebnisse von diesen Schritten:
 1. Für `all_augmentations`:
-![Measurement example 1](data/inference/Images/wear_measurement_all_aug/example_1.png)
-![VBMax_plot_all](data/inference/Images/wear_measurement_all_aug/VBMax_plot_all.png)
-![VBMax_plot_edge_1](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_1.png)
-![VBMax_plot_edge_2](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_2.png)
-![VBMax_plot_edge_3](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_3.png)
-![VBMax_plot_edge_4](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_4.png)
+![Measurement example all_aug](data/inference/Images/wear_measurement_all_aug/3/424.png)
+![VBMax_plot_all_all_aug](data/inference/Images/wear_measurement_all_aug/VBMax_plot_all.png)
+![VBMax_plot_edge_1_all_aug](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_1.png)
+![VBMax_plot_edge_2_all_aug](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_2.png)
+![VBMax_plot_edge_3_all_aug](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_3.png)
+![VBMax_plot_edge_4_all_aug](data/inference/Images/wear_measurement_all_aug/VBMax_plot_edge_4.png)
 
 2. Für `only_rotation`:
-![Measurement example 1](data/inference/Images/wear_measurement_only_rot/example_1.png)
-![VBMax_plot_all](data/inference/Images/wear_measurement_only_rot/VBMax_plot_all.png)
-![VBMax_plot_edge_1](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_1.png)
-![VBMax_plot_edge_2](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_2.png)
-![VBMax_plot_edge_3](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_3.png)
-![VBMax_plot_edge_4](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_4.png)
+![Measurement example only_rot](data/inference/Images/wear_measurement_only_rot/1/560.png)
+![VBMax_plot_all_only_rot](data/inference/Images/wear_measurement_only_rot/VBMax_plot_all.png)
+![VBMax_plot_edge_1_only_rot](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_1.png)
+![VBMax_plot_edge_2_only_rot](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_2.png)
+![VBMax_plot_edge_3_only_rot](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_3.png)
+![VBMax_plot_edge_4_only_rot](data/inference/Images/wear_measurement_only_rot/VBMax_plot_edge_4.png)
 
 - Ich habe auch die Messungen visualisiert und für die einzelnen schneidekanten
   sortiert. Die sind unter `data/inference/wear_measurement_*/<1-4>`. Ihr könnt
