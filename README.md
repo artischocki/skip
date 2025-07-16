@@ -197,6 +197,10 @@ pipeline/video/preprocess.py
         - danach folgt jedes 60. Frame wieder ein gut sichtbare schneide
         - die sind nicht perfekt aligned, aber genau das mache ich später ja
           mit dem image alignment, was wir vorher schon implementiert hatten
+    - ich lade auch die extrahierten und danach alignten bilder hier hoch, ihr
+      könnt daraus vllt auch gifs machen in denen man das ergebnis vom aligning
+      gut sieht. sind unter `data/inference/Video/*/images` und
+      `data/inference/Video/*/aligned`.
 2. Danach halte ich mich genau an die pipeline von image processing, also
     1. `wear_measurement/preprocess.py` -> align, crop, resize
     2. `wear_measurement/inference.py` -> predictions, cleaned_predictions
