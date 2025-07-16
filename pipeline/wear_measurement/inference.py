@@ -7,12 +7,12 @@ import numpy as np
 from PIL import Image
 
 # Input and output directories
-base_dir = Path(__file__).parents[2] / "data" / "inference" / "Images"
+base_dir = Path(__file__).parents[2] / "data" / "inference" / "Video" / "video0000031"
 resized_dir = base_dir / "resized"
 cropped_dir = base_dir / "cropped"
-predictions_dir = base_dir / "predictions"
+predictions_dir = base_dir / "predictions_all_aug"
 pred_overlay_dir = predictions_dir / "overlay"
-cleaned_predictions_dir = base_dir / "cleaned_predictions"
+cleaned_predictions_dir = base_dir / "cleaned_predictions_all_aug"
 cleaned_overlay_dir = cleaned_predictions_dir / "overlay"
 predictions_dir.mkdir(exist_ok=True)
 cleaned_predictions_dir.mkdir(exist_ok=True)

@@ -12,9 +12,9 @@ from tqdm import tqdm
 # Configuration
 # ----------------------------------------
 # Pfad zur Input-Ordner mit bereinigten Masken
-base_dir = Path(__file__).parents[2] / "data" / "inference" / "Images"
-cleaned_pred_dir = base_dir / "cleaned_predictions_all_aug"
-results_dir = base_dir / "wear_measurement_all_aug"
+base_dir = Path(__file__).parents[2] / "data" / "inference" / "Video" / "video0000031"
+cleaned_pred_dir = base_dir / "cleaned_predictions_only_rot"
+results_dir = base_dir / "wear_measurement_only_rot"
 results_dir.mkdir(exist_ok=True)
 for i in range(1, 5):
     (results_dir / f"{i}").mkdir(exist_ok=True)
@@ -152,7 +152,7 @@ plt.savefig(results_dir / "VBMax_plot_all.png")
 data = np.column_stack((cut_numbers, VBmax))
 
 # DBSCAN-Parameter eps und min_samples ggf. anpassen
-db = DBSCAN(eps=15, min_samples=3).fit(data)
+db = DBSCAN(eps=15, min_samples=1).fit(data)
 labels = db.labels_
 
 # Indizes der Ausreißer (label == -1)
