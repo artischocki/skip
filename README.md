@@ -71,7 +71,7 @@ und `correct_split_all_augmentations`.
 - Hier sind die 2 loss plots für 1. correct_split_all_augmentations und 2.
   correct_split_only_rotation:
 
-![Loss Plot 1](models/correct_split_all_augmentations/correct_split_all_augementations_lossplot.png)
+![Loss Plot 1](models/correct_split_all_augmentations/correct_split_all_augmentations_lossplot.png)
 ![Loss Plot 2](models/correct_split_only_rotation/correct_split_only_rotation_lossplot.png)
 
 
