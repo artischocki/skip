@@ -200,9 +200,22 @@ pipeline/video/preprocess.py
         - die sind nicht perfekt aligned, aber genau das mache ich später ja
           mit dem image alignment, was wir vorher schon implementiert hatten
 2. Danach halte ich mich genau an die pipeline von image processing, also
-    1. `wear_measurement/preprocess.py` -> alignte bilder, cropped resized
+    1. `wear_measurement/preprocess.py` -> align, crop, resize
     2. `wear_measurement/inference.py` -> predictions, cleaned_predictions
     3. `wear_measurement/wear_measurement.py` -> wear_measurement ergebnisse
-Die Ergebnisse vom wear_measurement findet ihr unter
-`data/test/Video/video0000030/wear_measurement` &
-`data/test/Video/video0000031/wear_measurement`.
+       (DBSCAN hier ausgeschaltet, weil zu wenige samples für sinnvolles
+       clustering)
+
+Die Ergergebbnisse vom wear_measurement findet ihr unter
+`data/test/Video/video0000030/wear_measurement_*` &
+`data/test/Video/video0000031/wear_measurement_*`.
+
+
+## 8. Welches Netz ist jetzt besser?
+Mir ist aufgefallen, dass das all_aug netz am Anfang besser performt. Also mit
+anfang meine ich die bilder in denen die schneidekanten noch fast heile sind.
+Bei stark zerstörten kanten performt das netz mit only_rot besser. Das habe ich
+so beim überfliegen der overlays festgestellt, aber nicht genauer untersucht.
+Ihr könnt das ja nochmal genauer untersuchen und das iwie graphisch in der
+präsi festhalten. das sieht man in den overlays gut aber auch in den vb_meas
+diagrammen aus den wear_measurement ergebnissen.
