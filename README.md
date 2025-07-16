@@ -44,8 +44,8 @@ Hinweis: Die falschen Bilder kommen aus: (https://github.com/EhsanWBK/KIP/tree/m
         2. H-Flip
         3. V-Flip
         4. H-Flip + V-Flip (entsprivht Drehung um 180Grad)
-- Es ergibt sich ein datensatz von 1680 Bildern (summiert aus train/val/test)
-- Ich habe auch nur rotations trainiert. (siehe 2. Training)
+- Es ergibt sich ein Trainingsdatensatz von 1176 Bildern
+- Ich habe auch nur rotations trainiert. (siehe 2. Training) (hier nur 294 Bilder)
 
 Wir haben auch mit Noise, Kontrastverstellung und Gaussian Blur rumprobiert,
 aber haben diese Modelle wieder verworfen, weil sie am Ende schlechter performt
